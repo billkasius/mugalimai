@@ -1,3 +1,4 @@
+// lib/features/classes/presentation/bloc/classes_event.dart
 import 'package:equatable/equatable.dart';
 
 abstract class ClassesEvent extends Equatable {
@@ -7,23 +8,7 @@ abstract class ClassesEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadClasses extends ClassesEvent {
-  final String teacherId;
-
-  const LoadClasses(this.teacherId);
-
-  @override
-  List<Object> get props => [teacherId];
-}
-
-class SelectSubject extends ClassesEvent {
-  final String subjectId;
-
-  const SelectSubject(this.subjectId);
-
-  @override
-  List<Object> get props => [subjectId];
-}
+class LoadClasses extends ClassesEvent {}
 
 class SelectClass extends ClassesEvent {
   final String classId;

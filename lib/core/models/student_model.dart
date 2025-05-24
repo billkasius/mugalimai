@@ -29,6 +29,13 @@ class StudentModel {
   String get fullName => '$firstName $lastName';
   String get initials => '${firstName[0]}${lastName[0]}';
 
+  double get averageGrade {
+    if (averageGrades.isEmpty) return 0.0;
+    final grades = averageGrades.values;
+    return grades.reduce((a, b) => a + b) / grades.length;
+  }
+
+
   // Конвертеры для DateTime
   static DateTime? _dateTimeFromJson(String? dateString) =>
       dateString != null ? DateTime.parse(dateString) : null;
@@ -39,3 +46,4 @@ class StudentModel {
 
   Map<String, dynamic> toJson() => _$StudentModelToJson(this);
 }
+

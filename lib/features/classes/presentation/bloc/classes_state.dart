@@ -1,7 +1,7 @@
+// lib/features/classes/presentation/bloc/classes_state.dart
 import 'package:equatable/equatable.dart';
 import '../../../../core/models/class_model.dart';
 import '../../../../core/models/student_model.dart';
-import '../../../../core/models/subject_model.dart';
 
 abstract class ClassesState extends Equatable {
   const ClassesState();
@@ -16,45 +16,26 @@ class ClassesLoading extends ClassesState {}
 
 class ClassesLoaded extends ClassesState {
   final List<ClassModel> classes;
-  final List<SubjectModel> subjects;
-  final SubjectModel? selectedSubject;
-  final ClassModel? selectedClass;
-  final List<StudentModel> filteredStudents;
+  final List<StudentModel> students;
   final String searchQuery;
 
   const ClassesLoaded({
     required this.classes,
-    required this.subjects,
-    this.selectedSubject,
-    this.selectedClass,
-    required this.filteredStudents,
+    this.students = const [],
     this.searchQuery = '',
   });
 
   @override
-  List<Object?> get props => [
-    classes,
-    subjects,
-    selectedSubject,
-    selectedClass,
-    filteredStudents,
-    searchQuery,
-  ];
+  List<Object?> get props => [classes, students, searchQuery];
 
   ClassesLoaded copyWith({
     List<ClassModel>? classes,
-    List<SubjectModel>? subjects,
-    SubjectModel? selectedSubject,
-    ClassModel? selectedClass,
-    List<StudentModel>? filteredStudents,
+    List<StudentModel>? students,
     String? searchQuery,
   }) {
     return ClassesLoaded(
       classes: classes ?? this.classes,
-      subjects: subjects ?? this.subjects,
-      selectedSubject: selectedSubject ?? this.selectedSubject,
-      selectedClass: selectedClass ?? this.selectedClass,
-      filteredStudents: filteredStudents ?? this.filteredStudents,
+      students: students ?? this.students,
       searchQuery: searchQuery ?? this.searchQuery,
     );
   }

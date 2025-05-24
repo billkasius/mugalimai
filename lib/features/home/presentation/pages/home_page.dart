@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage>
 
   // Моковые данные
   final DashboardStats _stats = const DashboardStats(
-    totalStudents: 156,
+    totalStudents: 152,
     totalClasses: 6,
     homeworksChecked: 89,
     testsGenerated: 23,
@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage>
   final List<StudentProgress> _studentProgress = [
     const StudentProgress(
       studentId: '1',
-      studentName: 'Айбек Сыдыков',
+      studentName: 'Айдар Сабырбеков',
       progressPercentage: 26,
       isImprovement: true,
       subject: 'Математика',
@@ -49,9 +49,9 @@ class _HomePageState extends State<HomePage>
     const StudentProgress(
       studentId: '3',
       studentName: 'Эрлан Мамытов',
-      progressPercentage: 12,
+      progressPercentage: 3,
       isImprovement: false,
-      subject: 'Английский язык',
+      subject: 'Кыргызский язык',
     ),
   ];
 
@@ -59,16 +59,16 @@ class _HomePageState extends State<HomePage>
     const ClassPerformance(
       classId: '1',
       className: '4 Б',
-      performanceChange: 10,
+      performanceChange: -8,
       isImprovement: false,
-      totalStudents: 28,
+      totalStudents: 19,
     ),
     const ClassPerformance(
       classId: '2',
-      className: '5 А',
+      className: '4 А',
       performanceChange: 15,
       isImprovement: true,
-      totalStudents: 25,
+      totalStudents: 21,
     ),
   ];
 

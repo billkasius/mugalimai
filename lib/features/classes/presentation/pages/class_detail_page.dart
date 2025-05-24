@@ -57,136 +57,128 @@ class _ClassDetailViewState extends State<ClassDetailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          // Красивый AppBar с градиентом предмета
-          SliverAppBar(
-            expandedHeight: 250,
-            floating: false,
-            pinned: true,
-            backgroundColor: widget.subject.color,
-            flexibleSpace: FlexibleSpaceBar(
-              title: FadeInUp(
-                child: Text(
-                  'Класс ${widget.classModel.displayName}',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    shadows: [
-                      Shadow(
-                        offset: Offset(0, 1),
-                        blurRadius: 3,
-                        color: Colors.black26,
-                      ),
-                    ],
-                  ),
-                ),
+      appBar: AppBar(
+        title: Text('Класс ${widget.classModel.displayName}'),
+        backgroundColor: widget.subject.color,
+        foregroundColor: Colors.white,
+        elevation: 0,
+      ),
+      body: Column(
+        children: [
+          // Статистика класса
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  widget.subject.color,
+                  widget.subject.color.withOpacity(0.8),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
-              background: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      widget.subject.color,
-                      widget.subject.color.withOpacity(0.8),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildStatItem(
+                  context,
+                  'Учеников',
+                  widget.classModel.studentCount.toString(),
+                  Icons.people,
                 ),
-                child: Stack(
-                  children: [
-                    // Декоративные элементы
-                    Positioned(
-                      top: 50,
-                      right: -50,
-                      child: FadeInRight(
-                        delay: const Duration(milliseconds: 600),
-                        child: Container(
-                          width: 150,
-                          height: 150,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white.withOpacity(0.1),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: -30,
-                      left: -30,
-                      child: FadeInLeft(
-                        delay: const Duration(milliseconds: 800),
-                        child: Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white.withOpacity(0.1),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    // Статистика класса
-                    Positioned(
-                      bottom: 60,
-                      left: 16,
-                      right: 16,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _buildStatItem(
-                            context,
-                            'Учеников',
-                            widget.classModel.studentCount.toString(),
-                            Icons.people,
-                            400,
-                          ),
-                          _buildStatItem(
-                            context,
-                            'Предмет',
-                            widget.subject.name,
-                            Icons.subject,
-                            600,
-                          ),
-                          _buildStatItem(
-                            context,
-                            'Средний балл',
-                            widget.classModel.averagePerformance > 0
-                                ? widget.classModel.averagePerformance.toStringAsFixed(1)
-                                : '—',
-                            Icons.grade,
-                            800,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                _buildStatItem(
+                  context,
+                  'Предмет',
+                  widget.subject.name,
+                  Icons.subject,
                 ),
-              ),
+                _buildStatItem(
+                  context,
+                  'Средний балл',
+                  widget.classModel.averagePerformance > 0
+                      ? widget.classModel.averagePerformance.toStringAsFixed(1)
+                      : '—',
+                  Icons.grade,
+                ),
+              ],
             ),
           ),
 
           // Поиск учеников
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: _SearchHeaderDelegate(
-              searchController: _searchController,
-              subject: widget.subject,
-              onSearchChanged: (query) {
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: TextField(
+              controller: _searchController,
+              onChanged: (query) {
                 context.read<ClassesBloc>().add(SearchStudents(query));
               },
+              decoration: InputDecoration(
+                hintText: 'Поиск учеников...',
+                prefixIcon: Icon(Icons.search, color: widget.subject.color),
+                suffixIcon: _searchController.text.isNotEmpty
+                    ? IconButton(
+                  icon: Icon(Icons.clear, color: widget.subject.color),
+                  onPressed: () {
+                    _searchController.clear();
+                    context.read<ClassesBloc>().add(const SearchStudents(''));
+                  },
+                )
+                    : null,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: widget.subject.color.withOpacity(0.3)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: widget.subject.color, width: 2),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: widget.subject.color.withOpacity(0.3)),
+                ),
+              ),
             ),
           ),
 
           // Список учеников
-          BlocBuilder<ClassesBloc, ClassesState>(
-            builder: (context, state) {
-              if (state is ClassesLoaded) {
-                final students = state.filteredStudents;
+          Expanded(
+            child: BlocBuilder<ClassesBloc, ClassesState>(
+              builder: (context, state) {
+                if (state is ClassesLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-                if (students.isEmpty && state.searchQuery.isNotEmpty) {
-                  return SliverFillRemaining(
-                    child: Center(
+                if (state is ClassesError) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.error,
+                          size: 64,
+                          color: Colors.red[300],
+                        ),
+                        const SizedBox(height: 16),
+                        Text(state.message),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            context.read<ClassesBloc>().add(SelectClass(widget.classModel.id));
+                          },
+                          child: const Text('Повторить'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                if (state is ClassesLoaded) {
+                  final students = state.students;
+
+                  if (students.isEmpty && state.searchQuery.isNotEmpty) {
+                    return Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -217,13 +209,11 @@ class _ClassDetailViewState extends State<ClassDetailView> {
                           ),
                         ],
                       ),
-                    ),
-                  );
-                }
+                    );
+                  }
 
-                if (students.isEmpty) {
-                  return SliverFillRemaining(
-                    child: Center(
+                  if (students.isEmpty) {
+                    return Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -244,17 +234,17 @@ class _ClassDetailViewState extends State<ClassDetailView> {
                           ),
                         ],
                       ),
-                    ),
-                  );
-                }
+                    );
+                  }
 
-                return SliverPadding(
-                  padding: const EdgeInsets.all(16),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                        final student = students[index];
-                        return StudentCard(
+                  return ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    itemCount: students.length,
+                    itemBuilder: (context, index) {
+                      final student = students[index];
+                      return FadeInLeft(
+                        delay: Duration(milliseconds: index * 50),
+                        child: StudentCard(
                           student: student,
                           subject: widget.subject,
                           delay: index * 50,
@@ -269,18 +259,15 @@ class _ClassDetailViewState extends State<ClassDetailView> {
                               ),
                             );
                           },
-                        );
-                      },
-                      childCount: students.length,
-                    ),
-                  ),
-                );
-              }
+                        ),
+                      );
+                    },
+                  );
+                }
 
-              return const SliverFillRemaining(
-                child: Center(child: CircularProgressIndicator()),
-              );
-            },
+                return const Center(child: Text('Неизвестное состояние'));
+              },
+            ),
           ),
         ],
       ),
@@ -292,94 +279,32 @@ class _ClassDetailViewState extends State<ClassDetailView> {
       String label,
       String value,
       IconData icon,
-      int delay,
       ) {
-    return FadeInUp(
-      delay: Duration(milliseconds: delay),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(icon, color: Colors.white, size: 24),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Colors.white.withOpacity(0.8),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _SearchHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final TextEditingController searchController;
-  final SubjectModel subject;
-  final Function(String) onSearchChanged;
-
-  _SearchHeaderDelegate({
-    required this.searchController,
-    required this.subject,
-    required this.onSearchChanged,
-  });
-
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      padding: const EdgeInsets.all(16),
-      child: TextField(
-        controller: searchController,
-        onChanged: onSearchChanged,
-        decoration: InputDecoration(
-          hintText: 'Поиск учеников...',
-          prefixIcon: Icon(Icons.search, color: subject.color),
-          suffixIcon: searchController.text.isNotEmpty
-              ? IconButton(
-            icon: Icon(Icons.clear, color: subject.color),
-            onPressed: () {
-              searchController.clear();
-              onSearchChanged('');
-            },
-          )
-              : null,
-          border: OutlineInputBorder(
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.2),
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: subject.color.withOpacity(0.3)),
           ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: subject.color, width: 2),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: subject.color.withOpacity(0.3)),
+          child: Icon(icon, color: Colors.white, size: 24),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          value,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
         ),
-      ),
+        Text(
+          label,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: Colors.white.withOpacity(0.8),
+          ),
+        ),
+      ],
     );
   }
-
-  @override
-  double get maxExtent => 80;
-
-  @override
-  double get minExtent => 80;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => false;
 }

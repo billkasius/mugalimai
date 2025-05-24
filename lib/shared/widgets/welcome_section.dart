@@ -54,7 +54,7 @@ class WelcomeSection extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              '${l10n.school} №${state.user.schoolNumber}',
+                              'Имени Аалы Токомбаева',
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                 color: Colors.white.withOpacity(0.8),
                               ),

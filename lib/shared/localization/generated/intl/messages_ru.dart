@@ -22,17 +22,44 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "about": MessageLookupByLibrary.simpleMessage("О приложении"),
+        "aboutApp": MessageLookupByLibrary.simpleMessage("О приложении"),
+        "addPhoto": MessageLookupByLibrary.simpleMessage("Добавить фото"),
+        "aiAnalysis": MessageLookupByLibrary.simpleMessage("Анализ ИИ"),
+        "aiProbability": MessageLookupByLibrary.simpleMessage("Вероятность ИИ"),
+        "appInfo":
+            MessageLookupByLibrary.simpleMessage("Информация о приложении"),
         "appTitle": MessageLookupByLibrary.simpleMessage("Mugalim AI"),
+        "appVersion": MessageLookupByLibrary.simpleMessage("Версия приложения"),
+        "appearance": MessageLookupByLibrary.simpleMessage("Внешний вид"),
+        "buildNumber": MessageLookupByLibrary.simpleMessage("Номер сборки"),
+        "camera": MessageLookupByLibrary.simpleMessage("Камера"),
         "checkHomework": MessageLookupByLibrary.simpleMessage("Проверить ДЗ"),
+        "checkWithAI":
+            MessageLookupByLibrary.simpleMessage("Проверить с помощью ИИ"),
+        "checking": MessageLookupByLibrary.simpleMessage("Проверяем..."),
         "classes": MessageLookupByLibrary.simpleMessage("Классы"),
+        "contactSupport":
+            MessageLookupByLibrary.simpleMessage("Связаться с поддержкой"),
         "darkTheme": MessageLookupByLibrary.simpleMessage("Темная тема"),
+        "developedBy": MessageLookupByLibrary.simpleMessage("Разработано"),
+        "developer": MessageLookupByLibrary.simpleMessage("Разработчик"),
         "education": MessageLookupByLibrary.simpleMessage("Учебный процесс"),
         "email": MessageLookupByLibrary.simpleMessage("Электронная почта"),
+        "enableNotifications":
+            MessageLookupByLibrary.simpleMessage("Включить уведомления"),
         "english": MessageLookupByLibrary.simpleMessage("Английский"),
         "enterEmail": MessageLookupByLibrary.simpleMessage("Введите email"),
         "enterPassword": MessageLookupByLibrary.simpleMessage("Введите пароль"),
+        "explanation": MessageLookupByLibrary.simpleMessage("Объяснение"),
+        "foundErrors": MessageLookupByLibrary.simpleMessage("Найденные ошибки"),
+        "gallery": MessageLookupByLibrary.simpleMessage("Галерея"),
+        "general": MessageLookupByLibrary.simpleMessage("Общие"),
         "generateTest": MessageLookupByLibrary.simpleMessage("Создать тест"),
+        "grade": MessageLookupByLibrary.simpleMessage("Оценка"),
         "hello": MessageLookupByLibrary.simpleMessage("Здравствуйте"),
+        "highAiProbability":
+            MessageLookupByLibrary.simpleMessage("Высокая вероятность ИИ"),
         "home": MessageLookupByLibrary.simpleMessage("Главная"),
         "invalidCredentials":
             MessageLookupByLibrary.simpleMessage("Неверный email или пароль"),
@@ -41,12 +68,44 @@ class MessageLookup extends MessageLookupByLibrary {
         "lightTheme": MessageLookupByLibrary.simpleMessage("Светлая тема"),
         "login": MessageLookupByLibrary.simpleMessage("Войти"),
         "logout": MessageLookupByLibrary.simpleMessage("Выйти"),
+        "lowAiProbability":
+            MessageLookupByLibrary.simpleMessage("Низкая вероятность ИИ"),
+        "mediumAiProbability":
+            MessageLookupByLibrary.simpleMessage("Средняя вероятность ИИ"),
+        "notifications": MessageLookupByLibrary.simpleMessage("Уведомления"),
         "password": MessageLookupByLibrary.simpleMessage("Пароль"),
+        "privacyPolicy":
+            MessageLookupByLibrary.simpleMessage("Политика конфиденциальности"),
         "profile": MessageLookupByLibrary.simpleMessage("Профиль"),
+        "rateApp": MessageLookupByLibrary.simpleMessage("Оценить приложение"),
+        "recognizedText":
+            MessageLookupByLibrary.simpleMessage("Распознанный текст"),
         "russian": MessageLookupByLibrary.simpleMessage("Русский"),
+        "saveWork": MessageLookupByLibrary.simpleMessage("Сохранить работу"),
+        "saving": MessageLookupByLibrary.simpleMessage("Сохраняем..."),
         "school": MessageLookupByLibrary.simpleMessage("Школа"),
+        "selectClass": MessageLookupByLibrary.simpleMessage("Выберите класс"),
+        "selectStudent":
+            MessageLookupByLibrary.simpleMessage("Выберите ученика"),
+        "selectSubject":
+            MessageLookupByLibrary.simpleMessage("Выберите предмет"),
         "settings": MessageLookupByLibrary.simpleMessage("Настройки"),
+        "shareApp":
+            MessageLookupByLibrary.simpleMessage("Поделиться приложением"),
+        "soundNotifications":
+            MessageLookupByLibrary.simpleMessage("Звуковые уведомления"),
+        "student": MessageLookupByLibrary.simpleMessage("Ученик"),
+        "subject": MessageLookupByLibrary.simpleMessage("Предмет"),
+        "support": MessageLookupByLibrary.simpleMessage("Поддержка"),
+        "systemTheme": MessageLookupByLibrary.simpleMessage("Системная"),
+        "teamName": MessageLookupByLibrary.simpleMessage("Командой Mugalim AI"),
+        "termsOfService":
+            MessageLookupByLibrary.simpleMessage("Условия использования"),
         "theme": MessageLookupByLibrary.simpleMessage("Тема"),
+        "topic": MessageLookupByLibrary.simpleMessage("Тема"),
+        "version": MessageLookupByLibrary.simpleMessage("Версия"),
+        "vibrationNotifications":
+            MessageLookupByLibrary.simpleMessage("Вибрация уведомлений"),
         "welcome": MessageLookupByLibrary.simpleMessage("Добро пожаловать")
       };
 }

@@ -299,6 +299,446 @@ class S {
       args: [],
     );
   }
+
+  /// `Select Class`
+  String get selectClass {
+    return Intl.message(
+      'Select Class',
+      name: 'selectClass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Student`
+  String get selectStudent {
+    return Intl.message(
+      'Select Student',
+      name: 'selectStudent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Subject`
+  String get selectSubject {
+    return Intl.message(
+      'Select Subject',
+      name: 'selectSubject',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Photo`
+  String get addPhoto {
+    return Intl.message(
+      'Add Photo',
+      name: 'addPhoto',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gallery`
+  String get gallery {
+    return Intl.message(
+      'Gallery',
+      name: 'gallery',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Camera`
+  String get camera {
+    return Intl.message(
+      'Camera',
+      name: 'camera',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check with AI`
+  String get checkWithAI {
+    return Intl.message(
+      'Check with AI',
+      name: 'checkWithAI',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Checking...`
+  String get checking {
+    return Intl.message(
+      'Checking...',
+      name: 'checking',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Student`
+  String get student {
+    return Intl.message(
+      'Student',
+      name: 'student',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subject`
+  String get subject {
+    return Intl.message(
+      'Subject',
+      name: 'subject',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Grade`
+  String get grade {
+    return Intl.message(
+      'Grade',
+      name: 'grade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Topic`
+  String get topic {
+    return Intl.message(
+      'Topic',
+      name: 'topic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save Work`
+  String get saveWork {
+    return Intl.message(
+      'Save Work',
+      name: 'saveWork',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saving...`
+  String get saving {
+    return Intl.message(
+      'Saving...',
+      name: 'saving',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recognized Text`
+  String get recognizedText {
+    return Intl.message(
+      'Recognized Text',
+      name: 'recognizedText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `AI Analysis`
+  String get aiAnalysis {
+    return Intl.message(
+      'AI Analysis',
+      name: 'aiAnalysis',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Found Errors`
+  String get foundErrors {
+    return Intl.message(
+      'Found Errors',
+      name: 'foundErrors',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `AI Probability`
+  String get aiProbability {
+    return Intl.message(
+      'AI Probability',
+      name: 'aiProbability',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Explanation`
+  String get explanation {
+    return Intl.message(
+      'Explanation',
+      name: 'explanation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Low AI probability`
+  String get lowAiProbability {
+    return Intl.message(
+      'Low AI probability',
+      name: 'lowAiProbability',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Medium AI probability`
+  String get mediumAiProbability {
+    return Intl.message(
+      'Medium AI probability',
+      name: 'mediumAiProbability',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `High AI probability`
+  String get highAiProbability {
+    return Intl.message(
+      'High AI probability',
+      name: 'highAiProbability',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notifications`
+  String get notifications {
+    return Intl.message(
+      'Notifications',
+      name: 'notifications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `About`
+  String get about {
+    return Intl.message(
+      'About',
+      name: 'about',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Version`
+  String get version {
+    return Intl.message(
+      'Version',
+      name: 'version',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Developer`
+  String get developer {
+    return Intl.message(
+      'Developer',
+      name: 'developer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Support`
+  String get support {
+    return Intl.message(
+      'Support',
+      name: 'support',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `System`
+  String get systemTheme {
+    return Intl.message(
+      'System',
+      name: 'systemTheme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enable Notifications`
+  String get enableNotifications {
+    return Intl.message(
+      'Enable Notifications',
+      name: 'enableNotifications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sound Notifications`
+  String get soundNotifications {
+    return Intl.message(
+      'Sound Notifications',
+      name: 'soundNotifications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vibration Notifications`
+  String get vibrationNotifications {
+    return Intl.message(
+      'Vibration Notifications',
+      name: 'vibrationNotifications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `App Information`
+  String get appInfo {
+    return Intl.message(
+      'App Information',
+      name: 'appInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contact Support`
+  String get contactSupport {
+    return Intl.message(
+      'Contact Support',
+      name: 'contactSupport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rate App`
+  String get rateApp {
+    return Intl.message(
+      'Rate App',
+      name: 'rateApp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Share App`
+  String get shareApp {
+    return Intl.message(
+      'Share App',
+      name: 'shareApp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Privacy Policy`
+  String get privacyPolicy {
+    return Intl.message(
+      'Privacy Policy',
+      name: 'privacyPolicy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Terms of Service`
+  String get termsOfService {
+    return Intl.message(
+      'Terms of Service',
+      name: 'termsOfService',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Appearance`
+  String get appearance {
+    return Intl.message(
+      'Appearance',
+      name: 'appearance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `General`
+  String get general {
+    return Intl.message(
+      'General',
+      name: 'general',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `About App`
+  String get aboutApp {
+    return Intl.message(
+      'About App',
+      name: 'aboutApp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `App Version`
+  String get appVersion {
+    return Intl.message(
+      'App Version',
+      name: 'appVersion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Build Number`
+  String get buildNumber {
+    return Intl.message(
+      'Build Number',
+      name: 'buildNumber',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Developed by`
+  String get developedBy {
+    return Intl.message(
+      'Developed by',
+      name: 'developedBy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mugalim AI Team`
+  String get teamName {
+    return Intl.message(
+      'Mugalim AI Team',
+      name: 'teamName',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

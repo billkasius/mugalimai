@@ -25,7 +25,8 @@ class ClassModel {
     required this.teacherId,
   });
 
-  String get displayName => '$grade $letter';
+  String get displayName => '$grade$letter класс';
+
 
   ClassModel copyWith({
     String? id,

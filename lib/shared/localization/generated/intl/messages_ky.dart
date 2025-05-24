@@ -22,19 +22,45 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "about": MessageLookupByLibrary.simpleMessage("Колдонмо жөнүндө"),
+        "aboutApp": MessageLookupByLibrary.simpleMessage("Колдонмо жөнүндө"),
+        "addPhoto": MessageLookupByLibrary.simpleMessage("Сүрөт кошуу"),
+        "aiAnalysis": MessageLookupByLibrary.simpleMessage("ИИ талдоосу"),
+        "aiProbability": MessageLookupByLibrary.simpleMessage("ИИ ыктымалдыгы"),
+        "appInfo": MessageLookupByLibrary.simpleMessage("Колдонмо маалыматы"),
         "appTitle": MessageLookupByLibrary.simpleMessage("Mugalim AI"),
+        "appVersion": MessageLookupByLibrary.simpleMessage("Колдонмо версиясы"),
+        "appearance": MessageLookupByLibrary.simpleMessage("Көрүнүш"),
+        "buildNumber": MessageLookupByLibrary.simpleMessage("Курулуш номери"),
+        "camera": MessageLookupByLibrary.simpleMessage("Камера"),
         "checkHomework":
             MessageLookupByLibrary.simpleMessage("Үй тапшырмасын текшерүү"),
+        "checkWithAI":
+            MessageLookupByLibrary.simpleMessage("ИИ менен текшерүү"),
+        "checking": MessageLookupByLibrary.simpleMessage("Текшерилүүдө..."),
         "classes": MessageLookupByLibrary.simpleMessage("Класстар"),
+        "contactSupport":
+            MessageLookupByLibrary.simpleMessage("Колдоо кызматы"),
         "darkTheme": MessageLookupByLibrary.simpleMessage("Караңгы тема"),
+        "developedBy": MessageLookupByLibrary.simpleMessage("Иштеп чыгарган"),
+        "developer": MessageLookupByLibrary.simpleMessage("Иштеп чыгуучу"),
         "education": MessageLookupByLibrary.simpleMessage("Окуу процесси"),
         "email": MessageLookupByLibrary.simpleMessage("Электрондук почта"),
+        "enableNotifications":
+            MessageLookupByLibrary.simpleMessage("Эскертүүлөрдү иштетүү"),
         "english": MessageLookupByLibrary.simpleMessage("Англисче"),
         "enterEmail": MessageLookupByLibrary.simpleMessage("Email киргизиңиз"),
         "enterPassword":
             MessageLookupByLibrary.simpleMessage("Сыр сөз киргизиңиз"),
+        "explanation": MessageLookupByLibrary.simpleMessage("Түшүндүрүү"),
+        "foundErrors": MessageLookupByLibrary.simpleMessage("Табылган каталар"),
+        "gallery": MessageLookupByLibrary.simpleMessage("Галерея"),
+        "general": MessageLookupByLibrary.simpleMessage("Жалпы"),
         "generateTest": MessageLookupByLibrary.simpleMessage("Тест түзүү"),
+        "grade": MessageLookupByLibrary.simpleMessage("Баа"),
         "hello": MessageLookupByLibrary.simpleMessage("Салам"),
+        "highAiProbability":
+            MessageLookupByLibrary.simpleMessage("ИИнин жогорку ыктымалдыгы"),
         "home": MessageLookupByLibrary.simpleMessage("Башкы бет"),
         "invalidCredentials":
             MessageLookupByLibrary.simpleMessage("Туура эмес email же сыр сөз"),
@@ -43,12 +69,44 @@ class MessageLookup extends MessageLookupByLibrary {
         "lightTheme": MessageLookupByLibrary.simpleMessage("Ачык тема"),
         "login": MessageLookupByLibrary.simpleMessage("Кирүү"),
         "logout": MessageLookupByLibrary.simpleMessage("Чыгуу"),
+        "lowAiProbability":
+            MessageLookupByLibrary.simpleMessage("ИИнин төмөнкү ыктымалдыгы"),
+        "mediumAiProbability":
+            MessageLookupByLibrary.simpleMessage("ИИнин орточо ыктымалдыгы"),
+        "notifications": MessageLookupByLibrary.simpleMessage("Эскертүүлөр"),
         "password": MessageLookupByLibrary.simpleMessage("Сыр сөз"),
+        "privacyPolicy":
+            MessageLookupByLibrary.simpleMessage("Купуялык саясаты"),
         "profile": MessageLookupByLibrary.simpleMessage("Профиль"),
+        "rateApp": MessageLookupByLibrary.simpleMessage("Колдонмону баалоо"),
+        "recognizedText":
+            MessageLookupByLibrary.simpleMessage("Таанылган текст"),
         "russian": MessageLookupByLibrary.simpleMessage("Орусча"),
+        "saveWork": MessageLookupByLibrary.simpleMessage("Жумушту сактоо"),
+        "saving": MessageLookupByLibrary.simpleMessage("Сакталууда..."),
         "school": MessageLookupByLibrary.simpleMessage("Мектеп"),
+        "selectClass": MessageLookupByLibrary.simpleMessage("Классты тандаңыз"),
+        "selectStudent":
+            MessageLookupByLibrary.simpleMessage("Окуучуну тандаңыз"),
+        "selectSubject":
+            MessageLookupByLibrary.simpleMessage("Предметти тандаңыз"),
         "settings": MessageLookupByLibrary.simpleMessage("Жөндөөлөр"),
+        "shareApp": MessageLookupByLibrary.simpleMessage("Колдонмону бөлүшүү"),
+        "soundNotifications":
+            MessageLookupByLibrary.simpleMessage("Үн эскертүүлөрү"),
+        "student": MessageLookupByLibrary.simpleMessage("Окуучу"),
+        "subject": MessageLookupByLibrary.simpleMessage("Предмет"),
+        "support": MessageLookupByLibrary.simpleMessage("Колдоо"),
+        "systemTheme": MessageLookupByLibrary.simpleMessage("Система"),
+        "teamName":
+            MessageLookupByLibrary.simpleMessage("Mugalim AI командасы"),
+        "termsOfService":
+            MessageLookupByLibrary.simpleMessage("Кызмат көрсөтүү шарттары"),
         "theme": MessageLookupByLibrary.simpleMessage("Тема"),
+        "topic": MessageLookupByLibrary.simpleMessage("Тема"),
+        "version": MessageLookupByLibrary.simpleMessage("Версия"),
+        "vibrationNotifications":
+            MessageLookupByLibrary.simpleMessage("Дирилдөө эскертүүлөрү"),
         "welcome": MessageLookupByLibrary.simpleMessage("Кош келиңиз")
       };
 }

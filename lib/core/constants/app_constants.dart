@@ -17,4 +17,9 @@ class AppConstants {
   static const String themeKey = 'theme';
   static const String languageKey = 'language';
   static const String isLoggedInKey = 'isLoggedIn';
+  static const String notificationsKey = 'notifications';
+  static const String soundNotificationsKey = 'sound_notifications';
+  static const String vibrationNotificationsKey = 'vibration_notifications';
+
+  static const String baseUrl = 'http://localhost:8000';
 }

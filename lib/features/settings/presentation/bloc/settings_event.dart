@@ -1,3 +1,4 @@
+// lib/features/settings/presentation/bloc/settings_event.dart
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
@@ -26,4 +27,32 @@ class ChangeTheme extends SettingsEvent {
 
   @override
   List<Object> get props => [themeMode];
+}
+
+// Новые события для уведомлений
+class ToggleNotifications extends SettingsEvent {
+  final bool enabled;
+
+  const ToggleNotifications(this.enabled);
+
+  @override
+  List<Object> get props => [enabled];
+}
+
+class ToggleSoundNotifications extends SettingsEvent {
+  final bool enabled;
+
+  const ToggleSoundNotifications(this.enabled);
+
+  @override
+  List<Object> get props => [enabled];
+}
+
+class ToggleVibrationNotifications extends SettingsEvent {
+  final bool enabled;
+
+  const ToggleVibrationNotifications(this.enabled);
+
+  @override
+  List<Object> get props => [enabled];
 }
