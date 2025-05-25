@@ -33,6 +33,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "appearance": MessageLookupByLibrary.simpleMessage("Көрүнүш"),
         "buildNumber": MessageLookupByLibrary.simpleMessage("Курулуш номери"),
         "camera": MessageLookupByLibrary.simpleMessage("Камера"),
+        "cancel": MessageLookupByLibrary.simpleMessage("Артка"),
         "checkHomework":
             MessageLookupByLibrary.simpleMessage("Үй тапшырмасын текшерүү"),
         "checkWithAI":
@@ -69,6 +70,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "lightTheme": MessageLookupByLibrary.simpleMessage("Ачык тема"),
         "login": MessageLookupByLibrary.simpleMessage("Кирүү"),
         "logout": MessageLookupByLibrary.simpleMessage("Чыгуу"),
+        "logoutConfirmation":
+            MessageLookupByLibrary.simpleMessage("Чын эле чыккыңыз келеби?"),
         "lowAiProbability":
             MessageLookupByLibrary.simpleMessage("ИИнин төмөнкү ыктымалдыгы"),
         "mediumAiProbability":

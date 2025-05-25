@@ -26,10 +26,10 @@ HomeworkCheckResponse _$HomeworkCheckResponseFromJson(
         Map<String, dynamic> json) =>
     HomeworkCheckResponse(
       status: json['status'] as String,
-      studentId: (json['studentId'] as num).toInt(),
-      studentName: json['studentName'] as String,
+      studentId: (json['student_id'] as num).toInt(),
+      studentName: json['student_name'] as String,
       subject: json['subject'] as String,
-      originalText: json['originalText'] as String,
+      originalText: json['original_text'] as String,
       analysis:
           HomeworkAnalysis.fromJson(json['analysis'] as Map<String, dynamic>),
     );
@@ -38,10 +38,10 @@ Map<String, dynamic> _$HomeworkCheckResponseToJson(
         HomeworkCheckResponse instance) =>
     <String, dynamic>{
       'status': instance.status,
-      'studentId': instance.studentId,
-      'studentName': instance.studentName,
+      'student_id': instance.studentId,
+      'student_name': instance.studentName,
       'subject': instance.subject,
-      'originalText': instance.originalText,
+      'original_text': instance.originalText,
       'analysis': instance.analysis,
     };
 
@@ -49,14 +49,14 @@ HomeworkAnalysis _$HomeworkAnalysisFromJson(Map<String, dynamic> json) =>
     HomeworkAnalysis(
       errors:
           (json['errors'] as List<dynamic>).map((e) => e as String).toList(),
-      aiProbability: (json['aiProbability'] as num).toInt(),
+      aiProbability: (json['ai_probability'] as num).toInt(),
       reason: json['reason'] as String,
     );
 
 Map<String, dynamic> _$HomeworkAnalysisToJson(HomeworkAnalysis instance) =>
     <String, dynamic>{
       'errors': instance.errors,
-      'aiProbability': instance.aiProbability,
+      'ai_probability': instance.aiProbability,
       'reason': instance.reason,
     };
 

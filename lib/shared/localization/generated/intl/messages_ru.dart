@@ -34,6 +34,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "appearance": MessageLookupByLibrary.simpleMessage("Внешний вид"),
         "buildNumber": MessageLookupByLibrary.simpleMessage("Номер сборки"),
         "camera": MessageLookupByLibrary.simpleMessage("Камера"),
+        "cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
         "checkHomework": MessageLookupByLibrary.simpleMessage("Проверить ДЗ"),
         "checkWithAI":
             MessageLookupByLibrary.simpleMessage("Проверить с помощью ИИ"),
@@ -68,6 +69,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "lightTheme": MessageLookupByLibrary.simpleMessage("Светлая тема"),
         "login": MessageLookupByLibrary.simpleMessage("Войти"),
         "logout": MessageLookupByLibrary.simpleMessage("Выйти"),
+        "logoutConfirmation": MessageLookupByLibrary.simpleMessage(
+            "Вы уверены, что хотите выйти?"),
         "lowAiProbability":
             MessageLookupByLibrary.simpleMessage("Низкая вероятность ИИ"),
         "mediumAiProbability":

@@ -26,7 +26,7 @@ class MainWrapper extends StatelessWidget {
                 return PopupMenuButton<String>(
                   onSelected: (value) {
                     if (value == 'logout') {
-                      _showLogoutDialog(context);
+                      _showLogoutDialog(context, l10n);
                     }
                   },
                   itemBuilder: (context) => [
@@ -51,13 +51,16 @@ class MainWrapper extends StatelessWidget {
                       ),
                     ),
                     const PopupMenuDivider(),
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: 'logout',
                       child: Row(
                         children: [
-                          Icon(Icons.logout, color: Colors.red),
-                          SizedBox(width: 8),
-                          Text('Выйти', style: TextStyle(color: Colors.red)),
+                          const Icon(Icons.logout, color: Colors.red),
+                          const SizedBox(width: 8),
+                          Text(
+                            l10n.logout, // Localized "Logout"
+                            style: const TextStyle(color: Colors.red),
+                          ),
                         ],
                       ),
                     ),
@@ -146,26 +149,26 @@ class MainWrapper extends StatelessWidget {
     }
   }
 
-  void _showLogoutDialog(BuildContext context) {
+  void _showLogoutDialog(BuildContext context, S l10n) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Выход'),
-        content: const Text('Вы уверены, что хотите выйти?'),
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.logout), // Localized "Logout"
+        content: Text(l10n.logoutConfirmation), // Localized "Are you sure you want to logout?"
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Отмена'),
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(l10n.cancel), // Localized "Cancel"
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop();
-              context.read<AuthBloc>().add(LogoutRequested());
+              Navigator.of(dialogContext).pop();
+              dialogContext.read<AuthBloc>().add(LogoutRequested());
             },
             style: TextButton.styleFrom(
               foregroundColor: Colors.red,
             ),
-            child: const Text('Выйти'),
+            child: Text(l10n.logout), // Localized "Logout"
           ),
         ],
       ),

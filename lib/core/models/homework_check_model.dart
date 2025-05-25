@@ -24,9 +24,12 @@ class HomeworkCheckRequest {
 @JsonSerializable()
 class HomeworkCheckResponse {
   final String status;
+  @JsonKey(name: 'student_id')
   final int studentId;
+  @JsonKey(name: 'student_name')
   final String studentName;
   final String subject;
+  @JsonKey(name: 'original_text')
   final String originalText;
   final HomeworkAnalysis analysis;
 
@@ -48,6 +51,7 @@ class HomeworkCheckResponse {
 @JsonSerializable()
 class HomeworkAnalysis {
   final List<String> errors;
+  @JsonKey(name: 'ai_probability')
   final int aiProbability;
   final String reason;
 

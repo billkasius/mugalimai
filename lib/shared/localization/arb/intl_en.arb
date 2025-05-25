@@ -69,5 +69,7 @@
   "appVersion": "App Version",
   "buildNumber": "Build Number",
   "developedBy": "Developed by",
-  "teamName": "Mugalim AI Team"
+  "teamName": "Mugalim AI Team",
+  "logoutConfirmation": "Are you sure want to logout?",
+  "cancel": "Cancel"
 }

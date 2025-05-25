@@ -4,11 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'app/app.dart';
+import 'features/auth/presentation/bloc/auth_event.dart';
 import 'injection_container.dart' as di;
 import 'shared/localization/generated/l10n.dart';
 import 'features/settings/presentation/bloc/settings_bloc.dart';
 import 'features/settings/presentation/bloc/settings_event.dart';
 import 'features/settings/presentation/bloc/settings_state.dart';
+import 'features/auth/presentation/bloc/auth_bloc.dart'; // Import AuthBloc
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,8 +29,15 @@ class MugalimApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SettingsBloc>(
-      create: (context) => SettingsBloc()..add(LoadSettings()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<SettingsBloc>(
+          create: (context) => SettingsBloc()..add(LoadSettings()),
+        ),
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc()..add(CheckAuthStatus()),
+        ),
+      ],
       child: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) {
           Locale currentLocale = const Locale('ru');
@@ -46,15 +55,15 @@ class MugalimApp extends StatelessWidget {
             // Локализация
             locale: currentLocale,
             localizationsDelegates: const [
-              S.delegate, // Используем ваш класс
+              S.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const [
-              Locale('en', ''), // English
-              Locale('ru', ''), // Russian
-              Locale('ky', ''), // Kyrgyz
+              Locale('en', ''),
+              Locale('ru', ''),
+              Locale('ky', ''),
             ],
 
             // Темы

@@ -1,8 +1,11 @@
 // lib/features/homework/presentation/pages/homework_check_page.dart
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 import 'package:animate_do/animate_do.dart';
+import 'package:path/path.dart' as path;
 import 'dart:io';
+import 'dart:convert';
 import '../../../../core/models/student_model.dart';
 import '../../../../core/models/subject_model.dart';
 import '../../../../core/models/class_model.dart';
@@ -21,7 +24,6 @@ class HomeworkCheckPage extends StatefulWidget {
 class _HomeworkCheckPageState extends State<HomeworkCheckPage> {
   final MockDataService _mockDataService = MockDataService();
   final HomeworkCheckService _homeworkCheckService = HomeworkCheckService();
-  final ImagePicker _picker = ImagePicker();
   final PageController _pageController = PageController();
 
   List<ClassModel> _classes = [];
@@ -29,8 +31,6 @@ class _HomeworkCheckPageState extends State<HomeworkCheckPage> {
   ClassModel? _selectedClass;
   StudentModel? _selectedStudent;
   SubjectModel? _selectedSubject;
-  File? _selectedImage;
-  bool _isLoading = false;
   bool _isLoadingClasses = true;
   bool _isLoadingStudents = false;
   int _currentStep = 0;
@@ -58,6 +58,9 @@ class _HomeworkCheckPageState extends State<HomeworkCheckPage> {
       setState(() {
         _isLoadingClasses = false;
       });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ошибка загрузки классов: $e')),
+      );
     }
   }
 
@@ -76,6 +79,9 @@ class _HomeworkCheckPageState extends State<HomeworkCheckPage> {
       setState(() {
         _isLoadingStudents = false;
       });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ошибка загрузки учеников: $e')),
+      );
     }
   }
 
@@ -118,85 +124,6 @@ class _HomeworkCheckPageState extends State<HomeworkCheckPage> {
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
-    }
-  }
-
-  Future<void> _pickImage() async {
-    try {
-      final XFile? image = await _picker.pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 80,
-      );
-
-      if (image != null) {
-        setState(() {
-          _selectedImage = File(image.path);
-        });
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ошибка выбора изображения: $e')),
-      );
-    }
-  }
-
-  Future<void> _takePhoto() async {
-    try {
-      final XFile? image = await _picker.pickImage(
-        source: ImageSource.camera,
-        imageQuality: 80,
-      );
-
-      if (image != null) {
-        setState(() {
-          _selectedImage = File(image.path);
-        });
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ошибка съемки: $e')),
-      );
-    }
-  }
-
-  Future<void> _checkHomework() async {
-    if (_selectedStudent == null || _selectedSubject == null || _selectedImage == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Заполните все поля')),
-      );
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final response = await _homeworkCheckService.checkHomework(
-        studentId: _selectedStudent!.id,
-        photo: _selectedImage!,
-        subject: _selectedSubject!.name,
-      );
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomeworkResultPage(
-            student: _selectedStudent!,
-            subject: _selectedSubject!,
-            response: response,
-            photoPath: _selectedImage!.path,
-          ),
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ошибка проверки: $e')),
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
@@ -484,60 +411,60 @@ class _HomeworkCheckPageState extends State<HomeworkCheckPage> {
     final color = avatarColors[index % avatarColors.length];
 
     return Card(
-        margin: const EdgeInsets.only(bottom: 12),
-    elevation: 2,
-    shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(12),
-    ),
-    child: InkWell(
-    onTap: () => _selectStudent(student),
-    borderRadius: BorderRadius.circular(12),
-    child: Padding(
-    padding: const EdgeInsets.all(16),
-    child: Row(
-    children: [
-    CircleAvatar(
-    backgroundColor: color,
-    radius: 24,
-    child: Text(
-    student.firstName[0],
-    style: const TextStyle(
-    color: Colors.white,
-    fontSize: 18,
-    fontWeight: FontWeight.bold,
-    ),
-    ),
-    ),
-      const SizedBox(width: 16),
-      Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              student.fullName,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
+      margin: const EdgeInsets.only(bottom: 12),
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: InkWell(
+        onTap: () => _selectStudent(student),
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundColor: color,
+                radius: 24,
+                child: Text(
+                  student.firstName[0],
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Средний балл: ${student.averageGrade.toStringAsFixed(1)}',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey[600],
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      student.fullName,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Средний балл: ${student.averageGrade.toStringAsFixed(1)}',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+              Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.grey[400],
+                size: 16,
+              ),
+            ],
+          ),
         ),
       ),
-      Icon(
-        Icons.arrow_forward_ios,
-        color: Colors.grey[400],
-        size: 16,
-      ),
-    ],
-    ),
-    ),
-    ),
     );
   }
 
@@ -584,7 +511,7 @@ class _HomeworkCheckPageState extends State<HomeworkCheckPage> {
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            _selectedStudent?.fullName ?? '',
+                            _selectedStudent?.fullName ?? 'Не выбран',
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
@@ -671,202 +598,651 @@ class _HomeworkCheckPageState extends State<HomeworkCheckPage> {
 
           const SizedBox(height: 16),
 
-          // Выбор фото
-          FadeInDown(
-            delay: const Duration(milliseconds: 400),
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
+          // Интеграция PhotoUploadWidget
+          if (_selectedStudent != null && _selectedSubject != null)
+            PhotoUploadWidget(
+              student: _selectedStudent!,
+              subject: _selectedSubject!,
+              onResult: (HomeworkCheckResponse response, String photoPath) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomeworkResultPage(
+                      student: _selectedStudent!,
+                      subject: _selectedSubject!,
+                      response: response,
+                      photoPath: photoPath,
+                    ),
+                  ),
+                );
+              },
+            )
+          else
+            const Center(
+              child: Text('Пожалуйста, выберите ученика и предмет'),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class PhotoUploadWidget extends StatefulWidget {
+  final StudentModel student;
+  final SubjectModel subject;
+  final Function(HomeworkCheckResponse, String) onResult;
+
+  const PhotoUploadWidget({
+    required this.student,
+    required this.subject,
+    required this.onResult,
+  });
+
+  @override
+  _PhotoUploadWidgetState createState() => _PhotoUploadWidgetState();
+}
+
+class _PhotoUploadWidgetState extends State<PhotoUploadWidget> {
+  File? _selectedImage;
+  final ImagePicker _picker = ImagePicker();
+  bool _isUploading = false;
+  Map<String, dynamic>? _analysisResult;
+  String? _errorMessage;
+
+  // URL вашего API
+  static const String API_BASE_URL = 'http://localhost:8000';
+
+  static const int STUDENT_ID = 1;
+
+  Future<void> _pickImage() async {
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1800,
+        maxHeight: 1800,
+        imageQuality: 85,
+      );
+
+      if (image != null) {
+        setState(() {
+          _selectedImage = File(image.path);
+          _analysisResult = null;
+          _errorMessage = null;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Ошибка при выборе изображения: $e';
+      });
+    }
+  }
+
+  Future<void> _takePhoto() async {
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.camera,
+        maxWidth: 1800,
+        maxHeight: 1800,
+        imageQuality: 85,
+      );
+
+      if (image != null) {
+        setState(() {
+          _selectedImage = File(image.path);
+          _analysisResult = null;
+          _errorMessage = null;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Ошибка при съемке фото: $e';
+      });
+    }
+  }
+
+  Future<void> _uploadAndAnalyzeWithBytes() async {
+    if (_selectedImage == null) {
+      setState(() {
+        _errorMessage = 'Пожалуйста, выберите изображение';
+      });
+      return;
+    }
+
+    setState(() {
+      _isUploading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      // Читаем файл как bytes
+      List<int> imageBytes = await _selectedImage!.readAsBytes();
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('$API_BASE_URL/check/ru/'),
+      );
+
+      // Добавляем файл из bytes
+      request.files.add(
+        http.MultipartFile.fromBytes(
+          'photo',
+          imageBytes,
+          filename: 'image.jpg',
+        ),
+      );
+
+      // Добавляем student_id
+      request.fields['student_id'] = STUDENT_ID.toString();
+
+      print('Отправляем запрос (bytes) на: ${request.url}');
+      print('Размер файла: ${imageBytes.length} bytes');
+      print('Поля: ${request.fields}');
+
+      // Отправляем запрос
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      print('Статус ответа: ${response.statusCode}');
+      print('Тело ответа: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        setState(() {
+          _analysisResult = jsonData;
+        });
+      } else {
+        setState(() {
+          _errorMessage = 'Ошибка сервера: ${response.statusCode}\n${response.body}';
+        });
+      }
+    } catch (e) {
+      print('Ошибка при отправке (bytes): $e');
+      setState(() {
+        _errorMessage = 'Ошибка сети: $e';
+      });
+    } finally {
+      setState(() {
+        _isUploading = false;
+      });
+    }
+  }
+
+  Future<void> _uploadAndAnalyze() async {
+    if (_selectedImage == null) {
+      setState(() {
+        _errorMessage = 'Пожалуйста, выберите изображение';
+      });
+      return;
+    }
+
+    setState(() {
+      _isUploading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('$API_BASE_URL/check/ru/'),
+      );
+
+      // Добавляем заголовки
+      request.headers.addAll({
+        'Content-Type': 'multipart/form-data',
+      });
+
+      // Определяем MIME тип на основе расширения файла
+      String fileName = path.basename(_selectedImage!.path);
+      String mimeType = 'image/jpeg'; // По умолчанию
+      String extension = path.extension(fileName).toLowerCase();
+
+      switch (extension) {
+        case '.jpg':
+        case '.jpeg':
+          mimeType = 'image/jpeg';
+          break;
+        case '.png':
+          mimeType = 'image/png';
+          break;
+        case '.gif':
+          mimeType = 'image/gif';
+          break;
+        case '.webp':
+          mimeType = 'image/webp';
+          break;
+      }
+
+      // Добавляем файл с правильным MIME типом
+      var multipartFile = await http.MultipartFile.fromPath(
+        'photo',
+        _selectedImage!.path,
+        filename: fileName,
+      );
+      request.files.add(multipartFile);
+
+      // Добавляем student_id как строку
+      request.fields['student_id'] = STUDENT_ID.toString();
+
+      print('Отправляем запрос на: ${request.url}');
+      print('Поля: ${request.fields}');
+      print('Файлы: ${request.files.map((f) => '${f.field}: ${f.filename}')}');
+
+      // Отправляем запрос
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      print('Статус ответа: ${response.statusCode}');
+      print('Тело ответа: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        setState(() {
+          _analysisResult = jsonData;
+        });
+      } else {
+        // Если первый способ не сработал, пробуем второй
+        print('Первый способ не сработал, пробуем отправить через bytes...');
+        await _uploadAndAnalyzeWithBytes();
+      }
+    } catch (e) {
+      print('Ошибка при отправке: $e');
+      // Пробуем альтернативный способ
+      print('Пробуем альтернативный способ отправки...');
+      await _uploadAndAnalyzeWithBytes();
+    } finally {
+      setState(() {
+        _isUploading = false;
+      });
+    }
+  }
+
+  Widget _buildAnalysisResult() {
+    if (_analysisResult == null) return const SizedBox.shrink();
+
+    final analysis = _analysisResult!['analysis'] as Map<String, dynamic>;
+    final errors = List<String>.from(analysis['errors'] ?? []);
+    final aiProbability = analysis['ai_probability'] ?? 0;
+    final reason = analysis['reason'] ?? '';
+    final originalText = _analysisResult!['original_text'] ?? '';
+
+    return FadeInUp(
+      child: Card(
+        margin: const EdgeInsets.only(top: 16),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.analytics,
+                    color: Colors.blue[700],
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Результат анализа',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+
+              // Информация о студенте
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.blue[50],
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Добавьте фото работы',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
+                      'Студент: Найден',
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    Text('ID: ${_analysisResult!['student_id']}'),
+                    Text('Предмет: ${_analysisResult!['subject']}'),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              // Распознанный текст
+              if (originalText.isNotEmpty) ...[
+                Text(
+                  'Распознанный текст:',
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    originalText,
+                    style: const TextStyle(
+                      fontFamily: 'monospace',
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
+
+              // Вероятность ИИ
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: aiProbability < 30
+                      ? Colors.green[50]
+                      : aiProbability < 70
+                      ? Colors.orange[50]
+                      : Colors.red[50],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      aiProbability < 30
+                          ? Icons.check_circle
+                          : aiProbability < 70
+                          ? Icons.warning
+                          : Icons.error,
+                      color: aiProbability < 30
+                          ? Colors.green[700]
+                          : aiProbability < 70
+                          ? Colors.orange[700]
+                          : Colors.red[700],
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Вероятность ИИ: $aiProbability%',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: aiProbability < 30
+                                  ? Colors.green[700]
+                                  : aiProbability < 70
+                                  ? Colors.orange[700]
+                                  : Colors.red[700],
+                            ),
+                          ),
+                          if (reason.isNotEmpty) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              reason,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[700],
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 12),
+                  ],
+                ),
+              ),
 
-                    if (_selectedImage != null) ...[
-                      Container(
-                        width: double.infinity,
-                        height: 200,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          image: DecorationImage(
-                            image: FileImage(_selectedImage!),
-                            fit: BoxFit.cover,
+              // Ошибки
+              if (errors.isNotEmpty) ...[
+                const SizedBox(height: 16),
+                Text(
+                  'Найденные ошибки:',
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ...errors.map((error) => Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.red[50],
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.red[200]!),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(
+                        Icons.error_outline,
+                        color: Colors.red[700],
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          error,
+                          style: TextStyle(
+                            color: Colors.red[800],
+                            fontSize: 14,
                           ),
                         ),
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              top: 8,
-                              right: 8,
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _selectedImage = null;
-                                  });
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.all(4),
-                                  decoration: const BoxDecoration(
-                                    color: Colors.red,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(
-                                    Icons.close,
-                                    color: Colors.white,
-                                    size: 16,
-                                  ),
+                      ),
+                    ],
+                  ),
+                )),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // Выбор фото
+        FadeInDown(
+          delay: const Duration(milliseconds: 400),
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Добавьте фото работы',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  if (_selectedImage != null) ...[
+                    Container(
+                      width: double.infinity,
+                      height: 200,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        image: DecorationImage(
+                          image: FileImage(_selectedImage!),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 8,
+                            right: 8,
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _selectedImage = null;
+                                  _analysisResult = null;
+                                  _errorMessage = null;
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: const BoxDecoration(
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                  size: 16,
                                 ),
                               ),
                             ),
-                          ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                  ] else ...[
+                    Container(
+                      width: double.infinity,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Colors.grey[300]!,
+                          style: BorderStyle.solid,
                         ),
                       ),
-                      const SizedBox(height: 12),
-                    ] else ...[
-                      Container(
-                        width: double.infinity,
-                        height: 120,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.grey[300]!,
-                            style: BorderStyle.solid,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.image_outlined,
+                            size: 48,
+                            color: Colors.grey[400],
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Фото не выбрано',
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: _isUploading ? null : _pickImage,
+                          icon: const Icon(Icons.photo_library),
+                          label: const Text('Галерея'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue[50],
+                            foregroundColor: Colors.blue[700],
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              side: BorderSide(color: Colors.blue[200]!),
+                            ),
                           ),
                         ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.image_outlined,
-                              size: 48,
-                              color: Colors.grey[400],
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: _isUploading ? null : _takePhoto,
+                          icon: const Icon(Icons.camera_alt),
+                          label: const Text('Камера'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green[50],
+                            foregroundColor: Colors.green[700],
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              side: BorderSide(color: Colors.green[200]!),
                             ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Фото не выбрано',
-                              style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 12),
                     ],
-
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: _pickImage,
-                            icon: const Icon(Icons.photo_library),
-                            label: const Text('Галерея'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue[50],
-                              foregroundColor: Colors.blue[700],
-                              elevation: 0,
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(color: Colors.blue[200]!),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: _takePhoto,
-                            icon: const Icon(Icons.camera_alt),
-                            label: const Text('Камера'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green[50],
-                              foregroundColor: Colors.green[700],
-                              elevation: 0,
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(color: Colors.green[200]!),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 24),
-
-          // Кнопка проверки
-          FadeInUp(
-            delay: const Duration(milliseconds: 600),
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: (_selectedSubject != null && _selectedImage != null && !_isLoading)
-                    ? _checkHomework
-                    : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
                   ),
-                  elevation: _selectedSubject != null && _selectedImage != null ? 4 : 0,
-                ),
-                child: _isLoading
-                    ? const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+
+                  // Кнопка анализа
+                  if (_selectedImage != null) ...[
+                    const SizedBox(height: 12),
                     SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Text('Проверяем работу...'),
-                  ],
-                )
-                    : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.psychology),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Проверить с помощью ИИ',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: (_selectedSubject != null && _selectedImage != null)
-                            ? Colors.white
-                            : Colors.grey[400],
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: _isUploading ? null : _uploadAndAnalyze,
+                        icon: _isUploading
+                            ? const SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        )
+                            : const Icon(Icons.analytics),
+                        label: Text(_isUploading ? 'Анализ...' : 'Анализировать'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.purple[600],
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
                       ),
                     ),
                   ],
-                ),
+
+                  // Сообщение об ошибке
+                  if (_errorMessage != null) ...[
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.red[50],
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.red[200]!),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.error, color: Colors.red[700]),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              _errorMessage!,
+                              style: TextStyle(color: Colors.red[800]),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
           ),
+        ),
 
-          const SizedBox(height: 16),
-        ],
-      ),
+        // Результат анализа
+        _buildAnalysisResult(),
+      ],
     );
   }
 }

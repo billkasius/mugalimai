@@ -154,8 +154,8 @@ class MockDataService {
     ),
     StudentModel(
       id: 'student_5',
-      firstName: 'Эльмира',
-      lastName: 'Кадырова',
+      firstName: 'Иван',
+      lastName: 'Иванов',
       classId: 'class_1',
       subjects: ['1', '2', '3', '4'],
       averageGrades: {'1': 4.3, '2': 4.5, '3': 4.2, '4': 4.4},

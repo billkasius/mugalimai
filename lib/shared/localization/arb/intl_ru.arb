@@ -69,5 +69,7 @@
   "appVersion": "Версия приложения",
   "buildNumber": "Номер сборки",
   "developedBy": "Разработано",
-  "teamName": "Командой Mugalim AI"
+  "teamName": "Командой Mugalim AI",
+  "logoutConfirmation": "Вы уверены, что хотите выйти?",
+  "cancel": "Отмена"
 }

@@ -69,5 +69,7 @@
   "appVersion": "Колдонмо версиясы",
   "buildNumber": "Курулуш номери",
   "developedBy": "Иштеп чыгарган",
-  "teamName": "Mugalim AI командасы"
+  "teamName": "Mugalim AI командасы",
+  "logoutConfirmation": "Чын эле чыккыңыз келеби?",
+  "cancel": "Артка"
 }

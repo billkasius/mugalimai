@@ -33,6 +33,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "appearance": MessageLookupByLibrary.simpleMessage("Appearance"),
         "buildNumber": MessageLookupByLibrary.simpleMessage("Build Number"),
         "camera": MessageLookupByLibrary.simpleMessage("Camera"),
+        "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "checkHomework": MessageLookupByLibrary.simpleMessage("Check Homework"),
         "checkWithAI": MessageLookupByLibrary.simpleMessage("Check with AI"),
         "checking": MessageLookupByLibrary.simpleMessage("Checking..."),
@@ -66,6 +67,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "lightTheme": MessageLookupByLibrary.simpleMessage("Light Theme"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "logout": MessageLookupByLibrary.simpleMessage("Logout"),
+        "logoutConfirmation": MessageLookupByLibrary.simpleMessage(
+            "Are you sure want to logout?"),
         "lowAiProbability":
             MessageLookupByLibrary.simpleMessage("Low AI probability"),
         "mediumAiProbability":
