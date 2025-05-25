@@ -1,6 +1,7 @@
 // lib/features/education/presentation/pages/education_page.dart
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:mugalimai/features/education/presentation/pages/test_generation_page.dart';
 import 'homework_check_page.dart';
 
 class EducationPage extends StatelessWidget {
@@ -143,12 +144,11 @@ class EducationPage extends StatelessWidget {
                       'Различные типы заданий',
                       'Автоматическая проверка',
                     ],
-                    isComingSoon: true,
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Функция будет доступна в следующем обновлении'),
-                          backgroundColor: Colors.purple,
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const TestGenerationPage(),
                         ),
                       );
                     },
